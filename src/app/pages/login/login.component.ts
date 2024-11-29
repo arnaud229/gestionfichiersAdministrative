@@ -46,6 +46,10 @@ import { User } from '../../models/user.model';
         <mat-card-actions>
           <button mat-button (click)="goToRegister()">Créer un compte</button>
         </mat-card-actions>
+
+        <mat-card-title *ngIf="iserrorlog">
+        <p class="smsError" >  {{erreur_message}} </p>
+        </mat-card-title>
       </mat-card>
     </div>
   `,
@@ -64,6 +68,11 @@ import { User } from '../../models/user.model';
     }
     mat-card-title {
     margin-bottom: 10px;
+    .smsError
+    {
+      color: red;
+      
+    }
   }
     form {
       display: flex;
@@ -74,11 +83,19 @@ import { User } from '../../models/user.model';
       display: flex;
       justify-content: center;
     }
+
+    .smsError
+    {
+      color: red;
+
+    }
   `]
 })
 export class LoginComponent {
   loginForm: FormGroup;
   currentUser: User | null = null;
+  erreur_message ='';
+  iserrorlog = false;
 
   constructor(
     private fb: FormBuilder,
@@ -93,7 +110,7 @@ export class LoginComponent {
 
   async onSubmit() {
     if (this.loginForm.valid) {
-      
+          this.iserrorlog = false;
         const { email, password } = this.loginForm.value;
         await this.auth.login(email, password).then(
         async  () => {
@@ -117,8 +134,12 @@ export class LoginComponent {
         )
       .catch (
         (error) => {
+
+          this.iserrorlog = true;
+          console.log('le error', error);
+            this.erreur_message = " Votre mot de passe ou email est mal renseigné"
             
-          console.error('Erreur de connexion:', error.message);
+
         }
       )
     }

@@ -67,7 +67,15 @@ import { AuthService } from '../../services/auth.service';
         <mat-card-actions>
           <button mat-button (click)="goToLogin()">Déjà inscrit ? Se connecter</button>
         </mat-card-actions>
+
+
+        <mat-card-title *ngIf="iserrorlog">
+        <p class="smsError" >  {{erreur_message}} </p>
+        </mat-card-title>
       </mat-card>
+
+  
+      
     </div>
   `,
   styles: [`
@@ -87,6 +95,12 @@ import { AuthService } from '../../services/auth.service';
     }
     mat-card-title {
     margin-bottom: 10px;
+
+    .smsError
+    {
+      color: red;
+      
+    }
   }
     form {
       display: flex;
@@ -97,10 +111,18 @@ import { AuthService } from '../../services/auth.service';
       display: flex;
       justify-content: center;
     }
+    .smsError
+    {
+      color: red;
+      
+    }
   `]
 })
 export class RegisterComponent {
   registerForm: FormGroup;
+  erreur_message ='';
+  iserrorlog = false;
+
 
   constructor(
     private fb: FormBuilder,
@@ -118,13 +140,36 @@ export class RegisterComponent {
 
   async onSubmit() {
     if (this.registerForm.valid) {
-      try {
+
+      this.iserrorlog = false;
+      
         const { password, ...userData } = this.registerForm.value;
-        await this.auth.register(userData, password);
-        this.router.navigate(['/login']);
-      } catch (error) {
-        console.error('Erreur d\'inscription:', error);
+        await this.auth.register(userData, password)
+        .then(
+          () => {
+            this.router.navigate(['/login']);
+          }
+        )
+        .catch(
+          (error) => {
+            
+        
+      var errorCode = error.code;
+      var errorMessage = error.message
+      this.erreur_message = errorMessage;
+
+      if (errorCode = "auth/network-request-failed") {
+
+        this.erreur_message = ' Verifiez votre connexion internet'
+        
+      } else if(errorCode = "auth/email-already-in-use") {
+        this.erreur_message = ' Un compte existe déjà avec ce email.'
+        
       }
+        console.error('Erreur d\'inscription:', error);
+
+          }
+        )
     }
   }
 
