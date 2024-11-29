@@ -1,0 +1,37 @@
+.dashboard-container {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .spacer {
+    flex: 1 1 auto;
+  }
+
+  mat-sidenav-container {
+    flex: 1;
+  }
+
+  mat-sidenav {
+    width: 250px;
+  }
+
+  .content {
+    padding: 20px;
+  }
+
+  .actions {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+
+  .zus
+  {
+    width: 20px;
+    height: 20px;
+  }
+
+  table {
+    width: 100%;
+  }

@@ -1,0 +1,74 @@
+<div class="dashboard-container">
+    <mat-toolbar color="primary">
+      <span>Gestion de Fichiers</span>
+      <span class="spacer"></span>
+      <button mat-icon-button (click)="logout()">
+        <img  src="assets/logout.png" alt="" >
+      </button>
+    </mat-toolbar>
+
+    <mat-sidenav-container>
+      <mat-sidenav mode="side" opened>
+        <mat-nav-list>
+          <a mat-list-item (click)="showMyFiles()">
+            <img class="zus" src="assets/icon_folder.png" alt="" >
+            Mes fichiers
+          </a>
+          <a mat-list-item (click)="showServiceFiles()">
+            Fichiers du service
+          </a>
+
+        <a mat-list-item [routerLink]="['/files']" routerLinkActive="router-link-active"  >
+          <img class="zus" src="assets/icon_folder_shared.png" alt="" >
+          Ajouiter un fichier
+        </a>
+
+        </mat-nav-list>
+      </mat-sidenav>
+
+      <mat-sidenav-content>
+        <div class="content">
+          <div class="actions">
+            <mat-form-field>
+              <mat-label>Rechercher</mat-label>
+              <input matInput (keyup)="applyFilter($event)" placeholder="Ex. rapport">
+            </mat-form-field>
+          </div>
+
+          <table mat-table [dataSource]="fichiers" class="mat-elevation-z8">
+            <ng-container matColumnDef="type">
+              <th mat-header-cell *matHeaderCellDef>Type</th>
+              <td mat-cell *matCellDef="let fichier">{{fichier.type}}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="objet">
+              <th mat-header-cell *matHeaderCellDef>Objet</th>
+              <td mat-cell *matCellDef="let fichier">{{fichier.objet}}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="date">
+              <th mat-header-cell *matHeaderCellDef>Date</th>
+              <td mat-cell *matCellDef="let fichier">{{fichier.date | date}}</td>
+            </ng-container>
+          
+            <ng-container matColumnDef="actions">
+              <th mat-header-cell *matHeaderCellDef>Actions</th>
+              <td mat-cell *matCellDef="let fichier">
+                <button mat-icon-button (click)="editFichier(fichier.id)">
+                  <img src="assets/edit2.png" alt="" >
+                  </button>
+
+                <button mat-icon-button (click)="downloadFile(fichier)">
+                    <img src="assets/icon_down.jpg" alt="" >
+                </button>
+               
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          </table>
+        </div>
+      </mat-sidenav-content>
+    </mat-sidenav-container>
+  </div>

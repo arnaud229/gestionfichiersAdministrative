@@ -1,0 +1,63 @@
+<div class="files-container">
+<mat-card>
+
+    <mat-card-header>
+        <mat-card-title> Ajouter un fichier </mat-card-title>
+      </mat-card-header>
+
+
+    <form [formGroup]="uploadForm" (ngSubmit)="onSubmit()">
+        <mat-form-field>
+          <mat-label>Type de document</mat-label>
+          <mat-select formControlName="type">
+            <mat-option value="RAPPORT">Rapport</mat-option>
+            <mat-option value="FACTURE">Facture</mat-option>
+            <mat-option value="CONTRAT">Contrat</mat-option>
+            <mat-option value="AUTRE">Autre</mat-option>
+          </mat-select>
+        </mat-form-field>
+    
+        <mat-form-field>
+          <mat-label>Service destinataire</mat-label>
+          <mat-select formControlName="serviceDestinataire">
+            <mat-option value="RH">Ressources Humaines</mat-option>
+            <mat-option value="IT">Informatique</mat-option>
+            <mat-option value="FINANCE">Finance</mat-option>
+            <mat-option value="MARKETING">Marketing</mat-option>
+          </mat-select>
+        </mat-form-field>
+    
+        <mat-form-field>
+          <mat-label>Objet</mat-label>
+          <input matInput formControlName="objet">
+        </mat-form-field>
+    
+        <input class="filescss" type="file" multiple (change)="onFileSelected($event)" #fileInput >
+    
+        <span (click)="getfils()"> 
+          
+            <img src="assets/download_icon.png " alt="">
+
+            
+            <mat-progress-bar mode="determinate" [value]="100"  *ngIf="isUploading"></mat-progress-bar>
+
+        </span>
+    
+
+  <button mat-raised-button color="primary" type="submit" [disabled]="!uploadForm.valid">
+          Uploader
+        </button>
+      </form>
+
+</mat-card>
+
+</div>
+
+<div  *ngIf="iserrorlog" class="loader">
+    <div class="groupError"  >
+      <p class="smsError"  >  {{message}} </p>
+      <button  (click)="closeError() " >ok</button>
+    </div> 
+
+</div>
+
